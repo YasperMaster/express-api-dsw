@@ -14,7 +14,18 @@ const users = [
     ),
 ]
 
-function sanitizeUserInput(req: Request, res: Response, next: NextFunction)
+function sanitizeUserInput(req: Request, res: Response, next: NextFunction) {
+
+    req.body.sanitizeUserInput = {
+        name: req.body.name,
+        email: req.body.email,
+        pass: req.body.pass,
+        birthdate: req.body.birthdate,
+    }
+    //faltan validaciones
+
+    next()
+}
 
 app.get("/api/users", (req, res) => {
     res.json({data: users})
@@ -28,28 +39,27 @@ app.get("/api/users/:id", (req, res) => {
     res.json({data: user})
 })
 
-app.post("/api/users", (req, res) => {
-    const { name, email, pass, birthdate } = req.body
+app.post("/api/users", sanitizeUserInput, (req, res) => {
+    const input = req.body.sanitizeUserInput
 
-    const user = new User (name, email, pass, birthdate)
+    const user = new User (
+        input.name, 
+        input.email, 
+        input.pass, 
+        input.birthdate)
 
     users.push(user)
     res.status(201).send({ message: "User created", data: user })
 })
 
-app.put("/api/users/:id", (req, res) => {
+app.put("/api/users/:id", sanitizeUserInput, (req, res) => {
     const userIdx = users.findIndex((user) => user.id === req.params.id)
     
     if(userIdx === -1){
         res.status(404).send({ message: "User not found" })
     }
-    const input = {
-        name: req.body.name,
-        email: req.body.email,
-        pass: req.body.pass,
-        birthdate: req.body.birthdate,
-    }
-    users[userIdx] = {...users[userIdx], ...input}
+    
+    users[userIdx] = {...users[userIdx], ...req.body.sanitizeUserInput}
 
     res.status(200).send({ message: "User updated succesfully" ,data: users[userIdx] })
 })
