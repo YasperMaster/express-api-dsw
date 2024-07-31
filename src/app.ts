@@ -1,5 +1,5 @@
 import express, { NextFunction, Request, Response } from "express";
-import { User } from "./user.js";
+import { User } from "./user/user.entity.js";
 
 const app = express()
 app.use(express.json())
