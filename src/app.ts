@@ -1,8 +1,11 @@
 import express, { NextFunction, Request, Response } from "express";
 import { User } from "./user/user.entity.js";
+import { UserRepository } from "./user/user.repository.js";
 
 const app = express()
 app.use(express.json())
+
+const repository = new UserRepository()
 
 const users = [
     new User(
@@ -33,11 +36,12 @@ function sanitizeUserInput(req: Request, res: Response, next: NextFunction) {
 }
 
 app.get("/api/users", (req, res) => {
-    res.json({data: users})
+    res.json({data: repository.findAll() })
 })
 
 app.get("/api/users/:id", (req, res) => {
-    const user = users.find((user) => user.id === req.params.id)
+    const id = req.params.id
+    const user = repository.findOne({id})
     if(!user){
        return res.status(404).send({ message:"User not found" })
     }
@@ -47,47 +51,45 @@ app.get("/api/users/:id", (req, res) => {
 app.post("/api/users", sanitizeUserInput, (req, res) => {
     const input = req.body.sanitizeUserInput
 
-    const user = new User (
+    const userInput = new User (
         input.name, 
         input.email, 
         input.pass, 
         input.birthdate)
 
-    users.push(user)
+    const user = repository.add(userInput)
     return res.status(201).send({ message: "User created", data: user })
 })
 
 app.put("/api/users/:id", sanitizeUserInput, (req, res) => {
-    const userIdx = users.findIndex((user) => user.id === req.params.id)
-    
-    if(userIdx === -1){
+    req.body.sanitizeUserInput.id = req.params.id
+    const user = repository.update(req.body.sanitizeUserInput)
+
+    if(!user){
         return res.status(404).send({ message: "User not found" })
     }
-    
-    users[userIdx] = {...users[userIdx], ...req.body.sanitizeUserInput}
 
-    return res.status(200).send({ message: "User updated succesfully" ,data: users[userIdx] })
+    return res.status(200).send({ message: "User updated succesfully" ,data: users })
 })
 
 app.patch("/api/users/:id", sanitizeUserInput, (req, res) => {
-    const userIdx = users.findIndex((user) => user.id === req.params.id)
-    
-    if(userIdx === -1){
+    req.body.sanitizeUserInput.id = req.params.id
+    const user = repository.update(req.body.sanitizeUserInput)
+
+    if(!user){
         return res.status(404).send({ message: "User not found" })
     }
-    
-    Object.assign (users[userIdx] , req.body.sanitizeUserInput)
 
-    return res.status(200).send({ message: "User updated succesfully" ,data: users[userIdx] })
+    return res.status(200).send({ message: "User updated succesfully" ,data: users })
 })
 
 app.delete("/api/users/:id", (req, res) => {
-    const userIdx = users.findIndex((user) => user.id === req.params.id)
+    const id = req.params.id
+    const user = repository.delete({id})
 
-    if(userIdx === -1){
+    if(!user){
         res.status(404).send({ message: "User not found" })
     }else {
-    users.splice(userIdx, 1)
     res.status(200).send({ message: "User deleted succesfully" })
     }
 })
