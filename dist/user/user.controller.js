@@ -8,7 +8,6 @@ function sanitizeUserInput(req, res, next) {
         pass: req.body.pass,
         birthdate: req.body.birthdate,
     };
-    //faltan validaciones
     Object.keys(req.body.sanitizeUserInput).forEach(key => {
         if (req.body.sanitizeUserInput[key] === undefined) {
             delete req.body.sanitizeUserInput[key];
@@ -17,7 +16,7 @@ function sanitizeUserInput(req, res, next) {
     next();
 }
 function findAll(req, res) {
-    res.json({ data: repository.findAll() });
+    return res.json({ data: repository.findAll() });
 }
 function findOne(req, res) {
     const id = req.params.id;

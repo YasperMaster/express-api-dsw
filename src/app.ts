@@ -1,12 +1,12 @@
-import express, { NextFunction, Request, Response } from "express";
-import { User } from "./user/user.entity.js";
-import { UserRepository } from "./user/user.repository.js";
+import express from "express";
 import { userRouter } from "./user/user.routes.js";
+import { eventoRouter } from "./evento/ruta.js";
 
 const app = express()
 app.use(express.json())
 
 app.use("/api/users", userRouter)
+app.use("/api/evento", eventoRouter)
 
 app.use((req, res) => {
     res.status(404).send({ message: "Resource not found" })
