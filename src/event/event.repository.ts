@@ -1,5 +1,5 @@
 import { Repository } from "../shared/repository.js";
-import { evento } from "./evento.js";
+import { evento } from "./event.entity.js";
 
 const eventos = [
     new evento (

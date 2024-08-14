@@ -4,7 +4,7 @@ GET http://localhost:3000/api/evento
 
 ### obtener un evento
 
-GET http://localhost:3000/api/evento/1233
+GET http://localhost:3000/api/evento/345345
 
 ### crear un nuevo evento
 
@@ -21,7 +21,7 @@ Content-Type: application/json
 }
 
 ### modificar un evento (PUT - recurso completo e inempotente)
-PUT http://localhost:3000/api/evento/345345
+PUT http://localhost:3000/api/evento/123123
 Content-Type: application/json
 
 {
@@ -35,7 +35,7 @@ Content-Type: application/json
 
 
 ### modificar un evento (PATCH - recurso parcial)
-PATCH http://localhost:3000/api/evento/345345
+PATCH http://localhost:3000/api/evento/123123
 Content-Type: application/json
 
 {
@@ -45,4 +45,4 @@ Content-Type: application/json
 
 
 ### Borrar un evento
-DELETE http://localhost:3000/api/evento/1233
+DELETE http://localhost:3000/api/evento/345345

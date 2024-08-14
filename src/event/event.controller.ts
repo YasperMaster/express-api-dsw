@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
-import { EventoRepository } from "./repositorio.js";
-import { evento } from "./evento.js";
+import { EventoRepository } from "./event.repository.js";
+import { evento } from "./event.entity.js";
 
 const repository = new EventoRepository()
 
@@ -54,7 +54,7 @@ function add(req: Request,res: Response) {
     
 
 function update(req: Request, res: Response){
-    req.body.sanitizedInput.id = req.params.id
+    req.body.sanitizedInput.idEvento = req.params.id
     const nuevoEvento = repository.update(req.body.sanitizedInput)
     
     if(!nuevoEvento){

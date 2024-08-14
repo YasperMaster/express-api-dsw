@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { sanitizedEventoInput, findAll, findOne, add, update, remove } from "./controlador.js";
+import { sanitizedEventoInput, findAll, findOne, add, update, remove } from "./event.controller.js";
 
 export const eventoRouter = Router()
 
